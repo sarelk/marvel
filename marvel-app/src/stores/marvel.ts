@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import type { MarvelCharacter, SearchFilters } from '@/types/marvel'
+import type { MarvelCharacter, SearchFilters, FilterOptions } from '@/types/marvel'
 import { marvelApi } from '@/services/marvelApi'
 
 export const useMarvelStore = defineStore('marvel', () => {
@@ -10,6 +10,8 @@ export const useMarvelStore = defineStore('marvel', () => {
   const isLoading = ref(false)
   const error = ref<string | null>(null)
   const searchQuery = ref('')
+  const filterType = ref<'all' | 'comics' | 'series' | 'events' | 'stories'>('all')
+  const minCount = ref(0)
   const totalResults = ref(0)
   const currentPage = ref(1)
   const itemsPerPage = ref(20)
@@ -36,15 +38,34 @@ export const useMarvelStore = defineStore('marvel', () => {
         // Use demo data when API keys are not configured
         response = marvelApi.getDemoCharacters()
         // Simulate filtering for demo data
+        let filteredResults = response.data.results
+        
+        // Apply search filter
         if (filters.nameStartsWith) {
           const searchTerm = filters.nameStartsWith.toLowerCase()
-          response.data.results = response.data.results.filter(char =>
+          filteredResults = filteredResults.filter(char =>
             char.name.toLowerCase().includes(searchTerm) ||
             char.description.toLowerCase().includes(searchTerm)
           )
-          response.data.count = response.data.results.length
-          response.data.total = response.data.results.length
         }
+        
+        // Apply content type filters
+        if (filters.comics && filters.comics > 0) {
+          filteredResults = filteredResults.filter(char => char.comics.available >= filters.comics!)
+        }
+        if (filters.series && filters.series > 0) {
+          filteredResults = filteredResults.filter(char => char.series.available >= filters.series!)
+        }
+        if (filters.events && filters.events > 0) {
+          filteredResults = filteredResults.filter(char => char.events.available >= filters.events!)
+        }
+        if (filters.stories && filters.stories > 0) {
+          filteredResults = filteredResults.filter(char => char.stories.available >= filters.stories!)
+        }
+        
+        response.data.results = filteredResults
+        response.data.count = filteredResults.length
+        response.data.total = filteredResults.length
       } else {
         // Use real API
         response = await marvelApi.getCharacters({
@@ -98,36 +119,66 @@ export const useMarvelStore = defineStore('marvel', () => {
   const searchCharacters = async (query: string) => {
     searchQuery.value = query
     currentPage.value = 1
-    
+    await applyFilters()
+  }
+
+  const applyFilters = async () => {
     const filters: SearchFilters = {}
-    if (query.trim()) {
-      filters.nameStartsWith = query.trim()
+    
+    // Apply search query
+    if (searchQuery.value.trim()) {
+      filters.nameStartsWith = searchQuery.value.trim()
+    }
+    
+    // Apply content type filters
+    if (filterType.value !== 'all' && minCount.value > 0) {
+      switch (filterType.value) {
+        case 'comics':
+          filters.comics = minCount.value
+          break
+        case 'series':
+          filters.series = minCount.value
+          break
+        case 'events':
+          filters.events = minCount.value
+          break
+        case 'stories':
+          filters.stories = minCount.value
+          break
+      }
     }
     
     await fetchCharacters(filters)
   }
 
+  const updateContentFilter = async (type: 'all' | 'comics' | 'series' | 'events' | 'stories', count: number = 0) => {
+    filterType.value = type
+    minCount.value = count
+    currentPage.value = 1
+    await applyFilters()
+  }
+
   const changePage = async (page: number) => {
     currentPage.value = page
-    const filters: SearchFilters = {}
-    if (searchQuery.value.trim()) {
-      filters.nameStartsWith = searchQuery.value.trim()
-    }
-    await fetchCharacters(filters)
+    await applyFilters()
   }
 
   const changeSortBy = async (sort: string) => {
     sortBy.value = sort
     currentPage.value = 1
-    const filters: SearchFilters = {}
-    if (searchQuery.value.trim()) {
-      filters.nameStartsWith = searchQuery.value.trim()
-    }
-    await fetchCharacters(filters)
+    await applyFilters()
   }
 
   const clearSearch = async () => {
     searchQuery.value = ''
+    currentPage.value = 1
+    await applyFilters()
+  }
+
+  const clearAllFilters = async () => {
+    searchQuery.value = ''
+    filterType.value = 'all'
+    minCount.value = 0
     currentPage.value = 1
     await fetchCharacters()
   }
@@ -152,6 +203,8 @@ export const useMarvelStore = defineStore('marvel', () => {
     isLoading,
     error,
     searchQuery,
+    filterType,
+    minCount,
     totalResults,
     currentPage,
     itemsPerPage,
@@ -164,9 +217,12 @@ export const useMarvelStore = defineStore('marvel', () => {
     fetchCharacters,
     fetchCharacterById,
     searchCharacters,
+    applyFilters,
+    updateContentFilter,
     changePage,
     changeSortBy,
     clearSearch,
+    clearAllFilters,
     clearSelectedCharacter,
     getImageUrl,
     init

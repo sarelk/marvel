@@ -80,7 +80,18 @@ export interface MarvelApiResponse<T> {
 export interface SearchFilters {
   name?: string
   nameStartsWith?: string
+  comics?: number
+  series?: number
+  events?: number
+  stories?: number
   limit?: number
   offset?: number
   orderBy?: string
+}
+
+export interface FilterOptions {
+  searchQuery: string
+  filterType: 'all' | 'comics' | 'series' | 'events' | 'stories'
+  minCount: number
+  sortBy: string
 } 

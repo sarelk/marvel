@@ -39,29 +39,94 @@
             </div>
           </div>
 
-          <!-- Sort and Clear -->
-          <div class="flex flex-col sm:flex-row gap-4">
-            <label for="sort-select" class="sr-only">Sort characters</label>
-            <select
-              id="sort-select"
-              v-model="localSortBy"
-              @change="handleSortChange"
-              class="flex-1 px-6 py-4 text-lg border-2 border-gray-200 rounded-xl focus:border-red-500 focus:ring-0 transition-colors"
-              aria-label="Sort characters by"
-            >
-              <option value="name">Sort A-Z</option>
-              <option value="-name">Sort Z-A</option>
-              <option value="modified">Oldest First</option>
-              <option value="-modified">Newest First</option>
-            </select>
+          <!-- Filter Controls -->
+          <div class="space-y-6">
+            <!-- Sort Options -->
+            <div>
+              <label for="sort-select" class="block text-sm font-medium text-gray-700 mb-2">
+                Sort Characters
+              </label>
+              <select
+                id="sort-select"
+                v-model="localSortBy"
+                @change="handleSortChange"
+                class="w-full px-4 py-3 text-base border-2 border-gray-200 rounded-lg focus:border-red-500 focus:ring-0 transition-colors bg-white"
+                aria-label="Sort characters by"
+              >
+                <option value="name">Alphabetical (A-Z)</option>
+                <option value="-name">Alphabetical (Z-A)</option>
+                <option value="modified">Oldest Characters First</option>
+                <option value="-modified">Newest Characters First</option>
+              </select>
+            </div>
 
+            <!-- Content Filters -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-3">
+                🎯 Filter by Character Activity
+              </label>
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                <!-- All Characters -->
+                <button
+                  @click="handleFilterClick('all')"
+                  :class="localFilterType === 'all' ? 'bg-red-500 text-white border-red-500' : 'bg-white text-gray-700 border-gray-200 hover:border-red-300'"
+                  class="flex items-center justify-center px-4 py-3 border-2 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                >
+                  <span class="text-lg mr-2">👥</span>
+                  <span class="font-medium">All Heroes</span>
+                </button>
+
+                <!-- Comics Filter -->
+                <button
+                  @click="handleFilterClick('comics')"
+                  :class="localFilterType === 'comics' ? 'bg-blue-500 text-white border-blue-500' : 'bg-white text-gray-700 border-gray-200 hover:border-blue-300'"
+                  class="flex items-center justify-center px-4 py-3 border-2 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                >
+                  <span class="text-lg mr-2">📚</span>
+                  <span class="font-medium">Comic Stars</span>
+                </button>
+
+                <!-- Series Filter -->
+                <button
+                  @click="handleFilterClick('series')"
+                  :class="localFilterType === 'series' ? 'bg-green-500 text-white border-green-500' : 'bg-white text-gray-700 border-gray-200 hover:border-green-300'"
+                  class="flex items-center justify-center px-4 py-3 border-2 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                >
+                  <span class="text-lg mr-2">📺</span>
+                  <span class="font-medium">Series Leads</span>
+                </button>
+
+                <!-- Events Filter -->
+                <button
+                  @click="handleFilterClick('events')"
+                  :class="localFilterType === 'events' ? 'bg-purple-500 text-white border-purple-500' : 'bg-white text-gray-700 border-gray-200 hover:border-purple-300'"
+                  class="flex items-center justify-center px-4 py-3 border-2 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+                >
+                  <span class="text-lg mr-2">⚡</span>
+                  <span class="font-medium">Event Heroes</span>
+                </button>
+              </div>
+            </div>
+
+
+          </div>
+
+          <!-- Active Filters Status -->
+          <div v-if="searchQuery || filterType !== 'all'" class="flex flex-wrap items-center justify-center gap-3 text-sm">
+            <span class="text-gray-600 font-medium">🔍 Active filters:</span>
+            <span v-if="searchQuery" class="inline-flex items-center px-3 py-2 rounded-full bg-blue-100 text-blue-800 font-medium">
+              🔤 "{{ searchQuery }}"
+            </span>
+            <span v-if="filterType !== 'all'" class="inline-flex items-center px-3 py-2 rounded-full font-medium"
+                  :class="getActiveFilterClass()">
+              {{ getActiveFilterLabel() }}
+            </span>
             <button
-              v-if="searchQuery"
-              @click="handleClearSearch"
-              class="btn-secondary px-6 py-4 text-lg"
-              aria-label="Clear search and show all characters"
+              @click="handleClearAllFilters"
+              class="inline-flex items-center px-3 py-2 rounded-full bg-red-100 text-red-800 hover:bg-red-200 transition-colors font-medium"
+              aria-label="Clear all filters and show all characters"
             >
-              Clear Search
+              🗑️ Clear All
             </button>
           </div>
         </div>
@@ -161,6 +226,8 @@ const {
   isLoading,
   error,
   searchQuery,
+  filterType,
+  minCount,
   totalPages,
   currentPage,
   sortBy
@@ -168,12 +235,16 @@ const {
 
 const localSearchQuery = ref('')
 const localSortBy = ref('name')
+const localFilterType = ref<'all' | 'comics' | 'series' | 'events' | 'stories'>('all')
+const localMinCount = ref(0)
 let searchTimeout: number | null = null
 
 // Initialize local values
 onMounted(async () => {
   localSearchQuery.value = searchQuery.value
   localSortBy.value = sortBy.value
+  localFilterType.value = filterType.value
+  localMinCount.value = minCount.value
   await marvelStore.init()
 })
 
@@ -201,9 +272,56 @@ const handleSortChange = () => {
   marvelStore.changeSortBy(localSortBy.value)
 }
 
+
+
 const handleClearSearch = () => {
   localSearchQuery.value = ''
   marvelStore.clearSearch()
+}
+
+const handleClearAllFilters = () => {
+  localSearchQuery.value = ''
+  localFilterType.value = 'all'
+  localMinCount.value = 0
+  marvelStore.clearAllFilters()
+}
+
+const handleFilterClick = (type: 'all' | 'comics' | 'series' | 'events' | 'stories') => {
+  localFilterType.value = type
+  localMinCount.value = 0
+  marvelStore.updateContentFilter(localFilterType.value, localMinCount.value)
+}
+
+
+
+const getActiveFilterClass = () => {
+  switch (filterType.value) {
+    case 'comics':
+      return 'bg-blue-100 text-blue-800'
+    case 'series':
+      return 'bg-green-100 text-green-800'
+    case 'events':
+      return 'bg-purple-100 text-purple-800'
+    case 'stories':
+      return 'bg-orange-100 text-orange-800'
+    default:
+      return 'bg-gray-100 text-gray-800'
+  }
+}
+
+const getActiveFilterLabel = () => {
+  switch (filterType.value) {
+    case 'comics':
+      return `📚 Comic Stars`
+    case 'series':
+      return `📺 Series Leads`
+    case 'events':
+      return `⚡ Event Heroes`
+    case 'stories':
+      return `📖 Story Rich`
+    default:
+      return ''
+  }
 }
 
 const handleCharacterClick = (id: number) => {
@@ -236,4 +354,6 @@ const retry = () => {
   white-space: nowrap;
   border: 0;
 }
+
+
 </style> 
