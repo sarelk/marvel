@@ -1,5 +1,10 @@
 <script setup lang="ts">
-// Modern minimal setup
+import { storeToRefs } from 'pinia'
+import { useFavoritesStore } from '@/stores/favorites'
+
+// Get favorites count for navigation badge
+const favoritesStore = useFavoritesStore()
+const { favoritesCount } = storeToRefs(favoritesStore)
 </script>
 
 <template>
@@ -52,6 +57,20 @@
               :aria-current="($route.name === 'characters' || $route.name === 'character-detail') ? 'page' : undefined"
             >
               Characters
+            </router-link>
+            <router-link 
+              to="/favorites" 
+              class="nav-link relative"
+              :class="{ 'nav-active': $route.name === 'favorites' }"
+              role="menuitem"
+              :aria-current="$route.name === 'favorites' ? 'page' : undefined"
+            >
+              <span class="flex items-center space-x-1">
+                <span>Favorites</span>
+                <span v-if="favoritesCount > 0" class="inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
+                  {{ favoritesCount > 9 ? '9+' : favoritesCount }}
+                </span>
+              </span>
             </router-link>
           </div>
         </div>
