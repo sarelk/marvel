@@ -20,7 +20,7 @@ export const useMarvelStore = defineStore('marvel', () => {
   
   // Automatically detect if we should use demo data based on environment variables
   const useDemoData = ref(
-    import.meta.env.VITE_USE_DEMO_DATA === 'false' || !marvelApi.hasValidApiKeys()
+    import.meta.env.VITE_USE_DEMO_DATA === 'true' || !marvelApi.hasValidApiKeys()
   )
 
   // Debug logging
