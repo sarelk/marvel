@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { MarvelCharacter, SearchFilters, FilterOptions } from '@/types/marvel'
 import { marvelApi } from '@/services/marvelApi'
+import { imageService } from '@/services/imageService'
 
 export const useMarvelStore = defineStore('marvel', () => {
   // State
@@ -78,6 +79,13 @@ export const useMarvelStore = defineStore('marvel', () => {
 
       characters.value = response.data.results
       totalResults.value = response.data.total
+      
+      // Preload images for better user experience
+      if (response.data.results.length > 0) {
+        imageService.preloadCharacterImages(response.data.results).catch(err => {
+          console.warn('Failed to preload some images:', err)
+        })
+      }
     } catch (err) {
       error.value = err instanceof Error ? err.message : 'An error occurred'
       console.error('Error fetching characters:', err)
