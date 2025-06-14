@@ -127,20 +127,58 @@
           </div>
 
           <!-- External Links -->
-          <div v-if="selectedCharacter.urls.length > 0" class="mb-8">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">External Links</h2>
+          <div class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Learn More</h2>
             <div class="flex flex-wrap gap-4">
+              <!-- Wikipedia Search -->
               <a
-                v-for="url in selectedCharacter.urls"
-                :key="url.url"
-                :href="url.url"
+                :href="getWikipediaUrl(selectedCharacter.name)"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="inline-flex items-center px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
-                {{ formatUrlType(url.type) }}
+                Wikipedia
                 <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                </svg>
+              </a>
+              
+              <!-- Marvel Official -->
+              <a
+                :href="getMarvelOfficialUrl(selectedCharacter.name)"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+              >
+                Marvel.com
+                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                </svg>
+              </a>
+              
+              <!-- Google Search -->
+              <a
+                :href="getGoogleSearchUrl(selectedCharacter.name)"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+              >
+                Google Search
+                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+              </a>
+              
+              <!-- Marvel Database (Fandom) -->
+              <a
+                :href="getMarvelDatabaseUrl(selectedCharacter.name)"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+              >
+                Marvel Database
+                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
                 </svg>
               </a>
             </div>
@@ -203,25 +241,33 @@ const handleImageError = (event: Event) => {
   img.src = 'https://via.placeholder.com/200x200/dc2626/ffffff?text=No+Image'
 }
 
-const formatUrlType = (type: string): string => {
-  switch (type) {
-    case 'detail':
-      return 'Marvel Details'
-    case 'wiki':
-      return 'Wiki'
-    case 'comiclink':
-      return 'Comics'
-    default:
-      return type.charAt(0).toUpperCase() + type.slice(1)
-  }
-}
-
 const formatDate = (dateString: string): string => {
   return new Date(dateString).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric'
   })
+}
+
+// URL generation functions for reliable external links
+const getWikipediaUrl = (characterName: string): string => {
+  const searchTerm = encodeURIComponent(`${characterName} Marvel Comics`)
+  return `https://en.wikipedia.org/wiki/Special:Search?search=${searchTerm}`
+}
+
+const getMarvelOfficialUrl = (characterName: string): string => {
+  const searchTerm = encodeURIComponent(characterName)
+  return `https://www.marvel.com/search?query=${searchTerm}`
+}
+
+const getGoogleSearchUrl = (characterName: string): string => {
+  const searchTerm = encodeURIComponent(`${characterName} Marvel character`)
+  return `https://www.google.com/search?q=${searchTerm}`
+}
+
+const getMarvelDatabaseUrl = (characterName: string): string => {
+  const searchTerm = encodeURIComponent(characterName)
+  return `https://marvel.fandom.com/wiki/Special:Search?query=${searchTerm}`
 }
 </script>
 
