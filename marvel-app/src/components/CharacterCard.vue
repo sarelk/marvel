@@ -1,16 +1,22 @@
 <template>
-  <div 
-    class="character-card card-modern p-6 cursor-pointer hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+  <article 
+    class="character-card card-modern p-6 cursor-pointer hover:shadow-lg transition-all duration-300 hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
     @click="$emit('click')"
+    @keydown.enter="$emit('click')"
+    @keydown.space.prevent="$emit('click')"
+    tabindex="0"
+    role="button"
+    :aria-label="`View details for ${character.name}`"
   >
     <!-- Character Image - Full Width -->
     <div class="w-full mb-6 flex justify-center">
       <div class="relative w-full max-w-sm">
         <img
           :src="imageUrl"
-          :alt="character.name"
+          :alt="`Portrait of ${character.name}, Marvel character`"
           class="w-full h-96 object-cover object-center rounded-xl shadow-lg"
           @error="handleImageError"
+          loading="lazy"
         />
       </div>
     </div>
@@ -28,9 +34,9 @@
       </p>
 
       <!-- Stats Grid -->
-      <div class="grid grid-cols-2 gap-4 py-4">
+      <div class="grid grid-cols-2 gap-4 py-4" role="group" aria-label="Character statistics">
         <div class="text-center bg-gray-50 rounded-lg p-4">
-          <div class="text-2xl font-bold text-red-600 mb-1">
+          <div class="text-2xl font-bold text-red-600 mb-1" aria-label="Number of comics">
             {{ character.comics.available }}
           </div>
           <div class="text-sm text-gray-500 font-medium">
@@ -38,7 +44,7 @@
           </div>
         </div>
         <div class="text-center bg-gray-50 rounded-lg p-4">
-          <div class="text-2xl font-bold text-red-600 mb-1">
+          <div class="text-2xl font-bold text-red-600 mb-1" aria-label="Number of series">
             {{ character.series.available }}
           </div>
           <div class="text-sm text-gray-500 font-medium">
@@ -58,7 +64,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </article>
 </template>
 
 <script setup lang="ts">

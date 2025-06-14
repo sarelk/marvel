@@ -4,13 +4,28 @@
 
 <template>
   <div id="app" class="min-h-screen bg-gray-50">
+    <!-- Skip to main content link for screen readers -->
+    <a 
+      href="#main-content" 
+      class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-red-600 text-white px-4 py-2 rounded-md z-50 focus:z-[60]"
+    >
+      Skip to main content
+    </a>
+
     <!-- Modern Header -->
-    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100">
-      <nav class="container py-4">
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100" role="banner">
+      <nav class="container py-4" role="navigation" aria-label="Main navigation">
         <div class="flex items-center justify-between">
           <!-- Logo -->
-          <router-link to="/" class="flex items-center space-x-3 group">
-            <div class="w-10 h-10 bg-gradient-to-br from-red-600 to-red-700 rounded-xl flex items-center justify-center shadow-sm">
+          <router-link 
+            to="/" 
+            class="flex items-center space-x-3 group"
+            aria-label="Marvel Explorer - Go to homepage"
+          >
+            <div 
+              class="w-10 h-10 bg-gradient-to-br from-red-600 to-red-700 rounded-xl flex items-center justify-center shadow-sm"
+              aria-hidden="true"
+            >
               <span class="text-white font-black text-lg">M</span>
             </div>
             <span class="text-xl font-bold text-gray-900 group-hover:text-red-600 transition-colors">
@@ -19,11 +34,13 @@
           </router-link>
 
           <!-- Navigation -->
-          <div class="flex items-center space-x-1">
+          <div class="flex items-center space-x-1" role="menubar">
             <router-link 
               to="/" 
               class="nav-link"
               :class="{ 'nav-active': $route.name === 'home' }"
+              role="menuitem"
+              :aria-current="$route.name === 'home' ? 'page' : undefined"
             >
               Home
             </router-link>
@@ -31,6 +48,8 @@
               to="/characters" 
               class="nav-link"
               :class="{ 'nav-active': $route.name === 'characters' || $route.name === 'character-detail' }"
+              role="menuitem"
+              :aria-current="($route.name === 'characters' || $route.name === 'character-detail') ? 'page' : undefined"
             >
               Characters
             </router-link>
@@ -40,7 +59,7 @@
     </header>
 
     <!-- Main Content -->
-    <main class="flex-1">
+    <main id="main-content" class="flex-1" role="main">
       <router-view />
     </main>
 
@@ -74,6 +93,30 @@
 </template>
 
 <style scoped>
+/* Screen reader only class */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.focus\:not-sr-only:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: 0.5rem 1rem;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
 .nav-link {
   padding: 0.5rem 1rem;
   font-size: 0.875rem;
@@ -84,13 +127,40 @@
   text-decoration: none;
 }
 
-.nav-link:hover {
+.nav-link:hover,
+.nav-link:focus {
   color: #dc2626;
   background-color: #fef2f2;
+  outline: 2px solid #dc2626;
+  outline-offset: 2px;
 }
 
 .nav-active {
   color: #dc2626;
   background-color: #fef2f2;
+}
+
+/* Focus styles for better keyboard navigation */
+*:focus {
+  outline: 2px solid #dc2626;
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .nav-link:hover,
+  .nav-link:focus {
+    background-color: #000;
+    color: #fff;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 </style>
