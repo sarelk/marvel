@@ -10,8 +10,8 @@ Create a `.env` file in the root of the `marvel-app` directory:
 
 ```bash
 # In marvel-app/.env
-MARVEL_PUBLIC_KEY=your_marvel_public_key_here
-MARVEL_PRIVATE_KEY=your_marvel_private_key_here
+VITE_MARVEL_PUBLIC_KEY=your_marvel_public_key_here
+VITE_MARVEL_PRIVATE_KEY=your_marvel_private_key_here
 VITE_USE_DEMO_DATA=false
 ```
 
@@ -28,8 +28,8 @@ Replace the placeholder values in your `.env` file:
 
 ```bash
 # Your actual Marvel API keys
-MARVEL_PUBLIC_KEY=8f4b7144892117f4a8aab41613d8b516
-MARVEL_PRIVATE_KEY=bf45aff41dbde2c965508b650b02f340b49c12cf
+VITE_MARVEL_PUBLIC_KEY=8f4b7144892117f4a8aab41613d8b516
+VITE_MARVEL_PRIVATE_KEY=bf45aff41dbde2c965508b650b02f340b49c12cf
 VITE_USE_DEMO_DATA=false
 ```
 
@@ -43,8 +43,8 @@ npm run dev
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `MARVEL_PUBLIC_KEY` | Your Marvel API public key | `''` |
-| `MARVEL_PRIVATE_KEY` | Your Marvel API private key | `''` |
+| `VITE_MARVEL_PUBLIC_KEY` | Your Marvel API public key | `''` |
+| `VITE_MARVEL_PRIVATE_KEY` | Your Marvel API private key | `''` |
 | `VITE_USE_DEMO_DATA` | Force demo mode even with valid keys | `true` |
 
 ## 🔄 Switching Between Demo and Live Data

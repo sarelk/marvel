@@ -4,8 +4,8 @@ import type { MarvelApiResponse, MarvelCharacter, SearchFilters } from '@/types/
 
 class MarvelApiService {
   private readonly baseURL = 'https://gateway.marvel.com/v1/public'
-  private readonly publicKey = import.meta.env.MARVEL_PUBLIC_KEY || ''
-  private readonly privateKey = import.meta.env.MARVEL_PRIVATE_KEY || ''
+  private readonly publicKey = import.meta.env.VITE_MARVEL_PUBLIC_KEY || ''
+  private readonly privateKey = import.meta.env.VITE_MARVEL_PRIVATE_KEY || ''
 
   private generateAuthParams() {
     const timestamp = Date.now().toString()
