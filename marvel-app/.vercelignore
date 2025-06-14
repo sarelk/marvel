@@ -1,0 +1,15 @@
+node_modules
+.git
+.vscode
+*.log
+.env.local
+.env.*.local
+coverage
+.nyc_output
+dist-ssr
+*.tgz
+*.tar.gz
+.cache
+.parcel-cache
+.DS_Store
+Thumbs.db 
