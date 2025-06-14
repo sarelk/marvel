@@ -20,8 +20,15 @@ export const useMarvelStore = defineStore('marvel', () => {
   
   // Automatically detect if we should use demo data based on environment variables
   const useDemoData = ref(
-    import.meta.env.VITE_USE_DEMO_DATA !== 'false' || !marvelApi.hasValidApiKeys()
+    import.meta.env.VITE_USE_DEMO_DATA === 'true' || !marvelApi.hasValidApiKeys()
   )
+
+  // Debug logging
+  console.log('Environment variables:', {
+    VITE_USE_DEMO_DATA: import.meta.env.VITE_USE_DEMO_DATA,
+    hasValidApiKeys: marvelApi.hasValidApiKeys(),
+    useDemoData: useDemoData.value
+  })
 
   // Computed
   const totalPages = computed(() => Math.ceil(totalResults.value / itemsPerPage.value))
