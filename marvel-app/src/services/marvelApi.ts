@@ -72,8 +72,8 @@ class MarvelApiService {
       data: {
         offset: 0,
         limit: 20,
-        total: 3,
-        count: 3,
+        total: 6,
+        count: 6,
         results: [
           {
             id: 1009610,
@@ -121,6 +121,54 @@ class MarvelApiService {
             series: { available: 0, collectionURI: '', items: [], returned: 0 },
             stories: { available: 0, collectionURI: '', items: [], returned: 0 },
             events: { available: 0, collectionURI: '', items: [], returned: 0 },
+            urls: []
+          },
+          {
+            id: 1009664,
+            name: 'Thor',
+            description: 'As the Norse God of thunder and lightning, Thor wields one of the greatest weapons ever made, the enchanted hammer Mjolnir. While others have described Thor as an over-muscled, oafish imbecile, he\'s quite smart and compassionate.',
+            modified: '2016-09-28T12:18:41-0400',
+            thumbnail: {
+              path: 'https://i.annihil.us/u/prod/marvel/i/mg/d/d0/5269657a74350',
+              extension: 'jpg'
+            },
+            resourceURI: 'http://gateway.marvel.com/v1/public/characters/1009664',
+            comics: { available: 85, collectionURI: '', items: [], returned: 0 },
+            series: { available: 42, collectionURI: '', items: [], returned: 0 },
+            stories: { available: 120, collectionURI: '', items: [], returned: 0 },
+            events: { available: 15, collectionURI: '', items: [], returned: 0 },
+            urls: []
+          },
+          {
+            id: 1009351,
+            name: 'Hulk',
+            description: 'Caught in a gamma bomb explosion while trying to save the life of a teenager, Dr. Bruce Banner was transformed into the incredibly powerful creature called the Hulk. An all too often misunderstood hero, the angrier the Hulk gets, the stronger the Hulk gets.',
+            modified: '2016-09-28T12:18:41-0400',
+            thumbnail: {
+              path: 'https://i.annihil.us/u/prod/marvel/i/mg/5/a0/538615ca33ab0',
+              extension: 'jpg'
+            },
+            resourceURI: 'http://gateway.marvel.com/v1/public/characters/1009351',
+            comics: { available: 95, collectionURI: '', items: [], returned: 0 },
+            series: { available: 38, collectionURI: '', items: [], returned: 0 },
+            stories: { available: 110, collectionURI: '', items: [], returned: 0 },
+            events: { available: 12, collectionURI: '', items: [], returned: 0 },
+            urls: []
+          },
+          {
+            id: 1009189,
+            name: 'Black Widow',
+            description: 'Despite super spy Natasha Romanoff\'s checkered past, she\'s become one of S.H.I.E.L.D.\'s most deadly assassins and a frequent member of the Avengers.',
+            modified: '2016-09-28T12:18:41-0400',
+            thumbnail: {
+              path: 'https://i.annihil.us/u/prod/marvel/i/mg/f/30/50fecad1f395b',
+              extension: 'jpg'
+            },
+            resourceURI: 'http://gateway.marvel.com/v1/public/characters/1009189',
+            comics: { available: 67, collectionURI: '', items: [], returned: 0 },
+            series: { available: 28, collectionURI: '', items: [], returned: 0 },
+            stories: { available: 89, collectionURI: '', items: [], returned: 0 },
+            events: { available: 8, collectionURI: '', items: [], returned: 0 },
             urls: []
           }
         ]

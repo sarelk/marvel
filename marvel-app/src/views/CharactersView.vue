@@ -22,7 +22,7 @@
                 id="character-search"
                 v-model="localSearchQuery"
                 @input="handleSearch"
-                @keyup.enter="handleSearch"
+                @keyup.enter="handleSearchImmediate"
                 type="text"
                 placeholder="Search for your favorite Marvel character..."
                 class="w-full px-6 py-4 pl-14 text-lg border-2 border-gray-200 rounded-xl focus:border-red-500 focus:ring-0 transition-colors"
@@ -168,6 +168,7 @@ const {
 
 const localSearchQuery = ref('')
 const localSortBy = ref('name')
+let searchTimeout: number | null = null
 
 // Initialize local values
 onMounted(async () => {
@@ -177,6 +178,22 @@ onMounted(async () => {
 })
 
 const handleSearch = () => {
+  // Clear existing timeout
+  if (searchTimeout) {
+    clearTimeout(searchTimeout)
+  }
+  
+  // Debounce search by 300ms
+  searchTimeout = setTimeout(() => {
+    marvelStore.searchCharacters(localSearchQuery.value)
+  }, 300)
+}
+
+const handleSearchImmediate = () => {
+  // For Enter key press, search immediately
+  if (searchTimeout) {
+    clearTimeout(searchTimeout)
+  }
   marvelStore.searchCharacters(localSearchQuery.value)
 }
 

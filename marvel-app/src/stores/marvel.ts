@@ -37,8 +37,10 @@ export const useMarvelStore = defineStore('marvel', () => {
         response = marvelApi.getDemoCharacters()
         // Simulate filtering for demo data
         if (filters.nameStartsWith) {
+          const searchTerm = filters.nameStartsWith.toLowerCase()
           response.data.results = response.data.results.filter(char =>
-            char.name.toLowerCase().startsWith(filters.nameStartsWith!.toLowerCase())
+            char.name.toLowerCase().includes(searchTerm) ||
+            char.description.toLowerCase().includes(searchTerm)
           )
           response.data.count = response.data.results.length
           response.data.total = response.data.results.length
