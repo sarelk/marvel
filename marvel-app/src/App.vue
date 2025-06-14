@@ -1,48 +1,38 @@
 <script setup lang="ts">
-// No specific setup needed for this component
+// Modern minimal setup
 </script>
 
 <template>
   <div id="app" class="min-h-screen bg-gray-50">
-    <!-- Navigation Header -->
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-      <nav class="container mx-auto px-4 py-4">
+    <!-- Modern Header -->
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100">
+      <nav class="container py-4">
         <div class="flex items-center justify-between">
-          <!-- Logo/Brand -->
-          <div class="flex items-center space-x-2">
-            <div class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center">
-              <span class="text-white font-bold text-lg">M</span>
+          <!-- Logo -->
+          <router-link to="/" class="flex items-center space-x-3 group">
+            <div class="w-10 h-10 bg-gradient-to-br from-red-600 to-red-700 rounded-xl flex items-center justify-center shadow-sm">
+              <span class="text-white font-black text-lg">M</span>
             </div>
-            <router-link 
-              to="/" 
-              class="text-2xl font-bold text-gray-800 hover:text-red-600 transition-colors"
-            >
-              Marvel Characters
-            </router-link>
-          </div>
+            <span class="text-xl font-bold text-gray-900 group-hover:text-red-600 transition-colors">
+              Marvel
+            </span>
+          </router-link>
 
-          <!-- Navigation Links -->
-          <div class="flex items-center space-x-6">
+          <!-- Navigation -->
+          <div class="flex items-center space-x-1">
             <router-link 
               to="/" 
               class="nav-link"
-              :class="{ 'router-link-active': $route.name === 'home' }"
+              :class="{ 'nav-active': $route.name === 'home' }"
             >
               Home
             </router-link>
             <router-link 
               to="/characters" 
               class="nav-link"
-              :class="{ 'router-link-active': $route.name === 'characters' }"
+              :class="{ 'nav-active': $route.name === 'characters' || $route.name === 'character-detail' }"
             >
               Characters
-            </router-link>
-            <router-link 
-              to="/about" 
-              class="nav-link"
-              :class="{ 'router-link-active': $route.name === 'about' }"
-            >
-              About
             </router-link>
           </div>
         </div>
@@ -54,21 +44,29 @@
       <router-view />
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-12 mt-16">
-      <div class="container mx-auto px-4">
-        <div class="text-center">
-          <h3 class="text-2xl font-bold mb-4">Marvel Characters Explorer</h3>
-          <p class="text-gray-400 mb-6 max-w-2xl mx-auto">
-            Discover the amazing world of Marvel superheroes and villains. 
-            Built with Vue 3, TypeScript, and Pinia for the ultimate character browsing experience.
-          </p>
-          <div class="text-sm text-gray-500">
-            <p>Data provided by Marvel. © 2023 MARVEL</p>
-            <p class="mt-2">
-              To use live Marvel API data, add your API keys to the marvelApi service.
-            </p>
+    <!-- Modern Footer -->
+    <footer class="bg-gray-900 text-white py-16 mt-20">
+      <div class="container text-center">
+        <div class="mb-8">
+          <div class="inline-flex items-center space-x-3 mb-4">
+            <div class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center">
+              <span class="text-white font-black">M</span>
+            </div>
+            <span class="text-xl font-bold">Marvel Explorer</span>
           </div>
+          <p class="text-gray-400 max-w-lg mx-auto leading-relaxed">
+            Discover the incredible world of Marvel superheroes and villains. 
+            Built with modern web technologies for the ultimate browsing experience.
+          </p>
+        </div>
+        
+        <div class="border-t border-gray-800 pt-8">
+          <p class="text-sm text-gray-500">
+            Data provided by Marvel. © 2023 MARVEL
+          </p>
+          <p class="text-xs text-gray-600 mt-2">
+            This project is not affiliated with Marvel Entertainment.
+          </p>
         </div>
       </div>
     </footer>
@@ -77,14 +75,22 @@
 
 <style scoped>
 .nav-link {
-  @apply text-gray-600 hover:text-red-600 px-3 py-2 rounded-md text-sm font-medium transition-colors;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+  text-decoration: none;
 }
 
-.nav-link.router-link-active {
-  @apply text-red-600 bg-red-50;
+.nav-link:hover {
+  color: #dc2626;
+  background-color: #fef2f2;
 }
 
-.container {
-  max-width: 1280px;
+.nav-active {
+  color: #dc2626;
+  background-color: #fef2f2;
 }
 </style>

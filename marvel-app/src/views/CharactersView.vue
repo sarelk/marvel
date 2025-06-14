@@ -1,79 +1,88 @@
 <template>
   <div class="characters-view">
-    <div class="container mx-auto px-4 py-8">
+    <div class="container py-12 max-w-2xl">
       <!-- Header -->
-      <div class="text-center mb-8">
-        <h1 class="text-4xl font-bold text-gray-800 mb-4">Marvel Characters</h1>
-        <p class="text-gray-600 max-w-2xl mx-auto">
-          Discover and explore your favorite Marvel superheroes and villains
+      <div class="text-center mb-12">
+        <h1 class="text-4xl lg:text-5xl font-black text-gray-900 mb-4">
+          Marvel Characters
+        </h1>
+        <p class="text-xl text-gray-600">
+          Discover legendary heroes and iconic villains from across the Marvel multiverse
         </p>
       </div>
 
       <!-- Search and Filters -->
-      <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-        <div class="flex flex-col md:flex-row gap-4 items-center">
+      <div class="card-modern p-6 mb-12">
+        <div class="space-y-4">
           <!-- Search Input -->
-          <div class="flex-1 w-full">
+          <div class="w-full">
             <div class="relative">
               <input
                 v-model="localSearchQuery"
                 @input="handleSearch"
                 @keyup.enter="handleSearch"
                 type="text"
-                placeholder="Search characters by name..."
-                class="w-full px-4 py-2 pl-10 pr-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                placeholder="Search for your favorite Marvel character..."
+                class="w-full px-6 py-4 pl-14 text-lg border-2 border-gray-200 rounded-xl focus:border-red-500 focus:ring-0 transition-colors"
               />
-              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg>
               </div>
             </div>
           </div>
 
-          <!-- Sort Dropdown -->
-          <div class="w-full md:w-auto">
+          <!-- Sort and Clear -->
+          <div class="flex flex-col sm:flex-row gap-4">
             <select
               v-model="localSortBy"
               @change="handleSortChange"
-              class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+              class="flex-1 px-6 py-4 text-lg border-2 border-gray-200 rounded-xl focus:border-red-500 focus:ring-0 transition-colors"
             >
-              <option value="name">Sort by Name</option>
-              <option value="-name">Sort by Name (Z-A)</option>
-              <option value="modified">Sort by Last Modified</option>
-              <option value="-modified">Sort by Last Modified (Newest)</option>
+              <option value="name">Sort A-Z</option>
+              <option value="-name">Sort Z-A</option>
+              <option value="modified">Oldest First</option>
+              <option value="-modified">Newest First</option>
             </select>
-          </div>
 
-          <!-- Clear Button -->
-          <button
-            v-if="searchQuery"
-            @click="handleClearSearch"
-            class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
-          >
-            Clear
-          </button>
+            <button
+              v-if="searchQuery"
+              @click="handleClearSearch"
+              class="btn-secondary px-6 py-4 text-lg"
+            >
+              Clear Search
+            </button>
+          </div>
         </div>
       </div>
 
       <!-- Loading State -->
-      <div v-if="isLoading" class="flex justify-center items-center py-12">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500"></div>
+      <div v-if="isLoading" class="flex justify-center items-center py-20">
+        <div class="relative">
+          <div class="w-16 h-16 border-4 border-gray-200 border-t-red-500 rounded-full animate-spin"></div>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="w-6 h-6 bg-red-500 rounded-full"></div>
+          </div>
+        </div>
       </div>
 
       <!-- Error State -->
-      <div v-else-if="error" class="text-center py-12">
-        <div class="text-red-500 text-lg mb-4">{{ error }}</div>
-        <button
-          @click="retry"
-          class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
-        >
+      <div v-else-if="error" class="text-center py-20">
+        <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+          <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </div>
+        <h3 class="text-2xl font-bold text-gray-900 mb-4">Something went wrong</h3>
+        <p class="text-gray-600 mb-8">{{ error }}</p>
+        <button @click="retry" class="btn-primary">
           Try Again
         </button>
       </div>
 
-      <!-- Characters Grid -->
-      <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <!-- Characters List - Single Column -->
+      <div v-else class="space-y-8">
         <CharacterCard
           v-for="character in characters"
           :key="character.id"
@@ -83,30 +92,38 @@
       </div>
 
       <!-- Empty State -->
-      <div v-if="!isLoading && !error && characters.length === 0" class="text-center py-12">
-        <div class="text-gray-500 text-lg mb-4">No characters found</div>
-        <p class="text-gray-400">Try adjusting your search criteria</p>
+      <div v-if="!isLoading && !error && characters.length === 0" class="text-center py-20">
+        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+          <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+        </div>
+        <h3 class="text-2xl font-bold text-gray-900 mb-4">No characters found</h3>
+        <p class="text-gray-600 mb-8">Try adjusting your search or clear filters to see all characters</p>
+        <button @click="handleClearSearch" class="btn-primary">
+          Show All Characters
+        </button>
       </div>
 
       <!-- Pagination -->
-      <div v-if="totalPages > 1" class="flex justify-center mt-8">
-        <div class="flex space-x-2">
+      <div v-if="totalPages > 1" class="flex justify-center mt-16">
+        <div class="flex items-center space-x-4">
           <button
             :disabled="currentPage === 1"
             @click="changePage(currentPage - 1)"
-            class="px-3 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+            class="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Previous
           </button>
           
-          <span class="px-4 py-2 text-gray-700">
+          <span class="px-6 py-3 text-lg font-medium text-gray-700">
             Page {{ currentPage }} of {{ totalPages }}
           </span>
           
           <button
             :disabled="currentPage === totalPages"
             @click="changePage(currentPage + 1)"
-            class="px-3 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+            class="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Next
           </button>

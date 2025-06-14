@@ -44,7 +44,7 @@
                 <img
                   :src="getImageUrl(selectedCharacter.thumbnail, 'standard_xlarge')"
                   :alt="selectedCharacter.name"
-                  class="w-32 h-32 md:w-48 md:h-48 object-cover rounded-full border-4 border-white shadow-lg"
+                  class="w-32 h-32 md:w-48 md:h-48 object-cover object-center rounded-full border-4 border-white shadow-lg"
                   @error="handleImageError"
                 />
               </div>
