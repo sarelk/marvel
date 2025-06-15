@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-// Animation states
-const isVisible = ref(false)
 const featuredCharacters = ref([
   { name: 'Spider-Man', emoji: '🕷️' },
   { name: 'Iron Man', emoji: '🤖' },
@@ -21,10 +19,6 @@ const stats = ref([
   { value: '300+', label: 'Series', icon: '📺' },
   { value: '80+', label: 'Years', icon: '⏰' }
 ])
-
-onMounted(() => {
-  isVisible.value = true
-})
 
 const handleExploreClick = () => {
   router.push('/characters')
@@ -46,7 +40,7 @@ const handleExploreClick = () => {
         <div class="text-center text-white">
           <div class="max-w-4xl mx-auto">
             <!-- Animated Title -->
-            <div class="mb-8" :class="{ 'animate-fade-in-up': isVisible }">
+            <div class="mb-8 smooth-entrance">
               <h1 class="text-5xl lg:text-7xl font-black mb-6 leading-tight">
                 🚀 Explore the
                 <span class="block bg-gradient-to-r from-red-200 to-yellow-200 bg-clip-text text-transparent">
@@ -63,15 +57,13 @@ const handleExploreClick = () => {
             </div>
 
             <!-- Enhanced Description -->
-            <p class="text-xl lg:text-2xl mb-12 text-red-100 font-light leading-relaxed max-w-3xl mx-auto"
-               :class="{ 'animate-fade-in-up delay-300': isVisible }">
+            <p class="text-xl lg:text-2xl mb-12 text-red-100 font-light leading-relaxed max-w-3xl mx-auto smooth-entrance-delay-1">
               Discover iconic heroes, legendary villains, and epic stories from 
               the Marvel multiverse. Your gateway to unlimited adventure awaits!
             </p>
 
             <!-- Enhanced CTAs -->
-            <div class="flex flex-col sm:flex-row gap-6 justify-center items-center"
-                 :class="{ 'animate-fade-in-up delay-500': isVisible }">
+            <div class="flex flex-col sm:flex-row gap-6 justify-center items-center smooth-entrance-delay-2">
               <button @click="handleExploreClick" 
                       class="group btn-primary text-lg px-10 py-4 transform hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl">
                 <span class="flex items-center gap-3">
@@ -101,8 +93,7 @@ const handleExploreClick = () => {
       <div class="container">
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-8">
           <div v-for="(stat, index) in stats" :key="stat.label" 
-               class="text-center transform hover:scale-105 transition-all duration-300"
-               :class="{ 'animate-fade-in-up': isVisible }"
+               class="text-center transform hover:scale-105 transition-all duration-300 smooth-entrance"
                :style="{ animationDelay: (index * 100) + 'ms' }">
             <div class="text-6xl mb-2">{{ stat.icon }}</div>
             <div class="text-3xl lg:text-4xl font-black text-red-600 mb-2">{{ stat.value }}</div>
@@ -206,8 +197,7 @@ const handleExploreClick = () => {
         <!-- Character Grid -->
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-16">
           <div v-for="(character, index) in featuredCharacters" :key="character.name"
-               class="group text-center transform hover:scale-110 transition-all duration-300 cursor-pointer"
-               :class="{ 'animate-fade-in-up': isVisible }"
+               class="group text-center transform hover:scale-110 transition-all duration-300 cursor-pointer smooth-entrance"
                :style="{ animationDelay: (index * 100) + 'ms' }"
                @click="handleExploreClick">
             <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-red-500 to-red-700 rounded-full flex items-center justify-center text-4xl group-hover:shadow-2xl transition-all duration-300">
@@ -283,28 +273,39 @@ const handleExploreClick = () => {
 </template>
 
 <style scoped>
-/* Enhanced animations */
-@keyframes fade-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
+/* Smooth entrance animations - no flicker, pure CSS */
+@keyframes smooth-fade-in {
+  0% {
+    opacity: 0.8;
+    transform: translateY(10px);
   }
-  to {
+  100% {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-.animate-fade-in-up {
-  animation: fade-in-up 0.8s ease-out forwards;
+.smooth-entrance {
+  animation: smooth-fade-in 0.8s ease-out forwards;
+  opacity: 1; /* Start visible to prevent flicker */
 }
 
-.delay-300 {
-  animation-delay: 0.3s;
+.smooth-entrance-delay-1 {
+  animation: smooth-fade-in 0.8s ease-out forwards;
+  animation-delay: 0.2s;
+  opacity: 1;
 }
 
-.delay-500 {
-  animation-delay: 0.5s;
+.smooth-entrance-delay-2 {
+  animation: smooth-fade-in 0.8s ease-out forwards;
+  animation-delay: 0.4s;
+  opacity: 1;
+}
+
+/* Ensure no layout shifts */
+.home-view {
+  opacity: 1;
+  visibility: visible;
 }
 
 /* Smooth scroll behavior */
