@@ -185,7 +185,10 @@ onMounted(async () => {
   try {
     imageUrl.value = await imageService.getCharacterImageUrl(props.character, 'standard_xlarge')
   } catch (error) {
-    console.warn('Failed to load character image:', error)
+    // Log errors only in development
+    if (import.meta.env.DEV) {
+      console.warn('Failed to load character image:', error)
+    }
     imageUrl.value = `https://ui-avatars.com/api/?name=${encodeURIComponent(props.character.name)}&size=600&background=dc2626&color=ffffff&bold=true&format=png&rounded=false&font-size=0.4`
   } finally {
     imageLoading.value = false
@@ -198,7 +201,10 @@ const handleImageError = async () => {
     const fallbackUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(props.character.name)}&size=600&background=dc2626&color=ffffff&bold=true&format=png&rounded=false&font-size=0.4`
     imageUrl.value = fallbackUrl
   } catch (error) {
-    console.warn('Failed to load fallback image:', error)
+    // Log errors only in development
+    if (import.meta.env.DEV) {
+      console.warn('Failed to load fallback image:', error)
+    }
   }
 }
 

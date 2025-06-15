@@ -10,7 +10,7 @@
         <div class="max-w-3xl mx-auto">
           <h1 class="text-4xl lg:text-6xl font-black mb-6 leading-tight">
             🚀 Explore the
-            <span class="block text-red-200">Marvel Universe ⚡🦸‍♂️✨</span>
+            <span class="block text-red-200">Marvel Universe 🦸‍♂️</span>
           </h1>
           <p class="text-xl lg:text-2xl mb-10 text-red-100 font-light leading-relaxed">
             Discover iconic heroes, legendary villains, and epic stories from 

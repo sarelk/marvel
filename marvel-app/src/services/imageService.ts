@@ -39,7 +39,10 @@ class ImageService {
         }
       } catch (error) {
         this.failedUrls.add(source.url)
-        console.warn(`Failed to load image from ${source.description}:`, source.url)
+        // Log image load failures only in development
+        if (import.meta.env.DEV) {
+          console.warn(`Failed to load image from ${source.description}:`, source.url)
+        }
       }
     }
 
@@ -211,7 +214,10 @@ class ImageService {
     try {
       await Promise.allSettled(preloadPromises)
     } catch (error) {
-      console.warn('Some images failed to preload:', error)
+      // Silently handle preload errors in production
+      if (import.meta.env.DEV) {
+        console.warn('Some images failed to preload:', error)
+      }
     }
   }
 

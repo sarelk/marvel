@@ -23,12 +23,7 @@ export const useMarvelStore = defineStore('marvel', () => {
     import.meta.env.VITE_USE_DEMO_DATA === 'true' || !marvelApi.hasValidApiKeys()
   )
 
-  // Debug logging
-  console.log('Environment variables:', {
-    VITE_USE_DEMO_DATA: import.meta.env.VITE_USE_DEMO_DATA,
-    hasValidApiKeys: marvelApi.hasValidApiKeys(),
-    useDemoData: useDemoData.value
-  })
+
 
   // Computed
   const totalPages = computed(() => Math.ceil(totalResults.value / itemsPerPage.value))
@@ -89,13 +84,16 @@ export const useMarvelStore = defineStore('marvel', () => {
       
       // Preload images for better user experience
       if (response.data.results.length > 0) {
-        imageService.preloadCharacterImages(response.data.results).catch(err => {
-          console.warn('Failed to preload some images:', err)
+        imageService.preloadCharacterImages(response.data.results).catch(() => {
+          // Silently handle preload errors in production
         })
       }
     } catch (err) {
       error.value = err instanceof Error ? err.message : 'An error occurred'
-      console.error('Error fetching characters:', err)
+      // Log errors only in development
+      if (import.meta.env.DEV) {
+        console.error('Error fetching characters:', err)
+      }
     } finally {
       isLoading.value = false
     }
@@ -125,7 +123,10 @@ export const useMarvelStore = defineStore('marvel', () => {
       }
     } catch (err) {
       error.value = err instanceof Error ? err.message : 'An error occurred'
-      console.error('Error fetching character:', err)
+      // Log errors only in development
+      if (import.meta.env.DEV) {
+        console.error('Error fetching character:', err)
+      }
     } finally {
       isLoading.value = false
     }
