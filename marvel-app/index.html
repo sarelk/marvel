@@ -1,10 +1,40 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="en">
   <head>
     <meta charset="UTF-8">
     <link rel="icon" href="/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marvel Explorer - Discover Your Favorite Heroes</title>
+    
+    <!-- Prevent layout shifts with font loading optimization -->
+    <style>
+      /* Critical CSS to prevent layout shifts */
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+      }
+      
+      #app {
+        min-height: 100vh;
+        opacity: 1;
+        visibility: visible;
+      }
+      
+      /* Prevent font loading layout shifts */
+      h1, h2, h3, h4, h5, h6 {
+        font-weight: 900;
+        line-height: 1.2;
+        margin: 0;
+      }
+      
+      /* Ensure emojis don't cause layout shifts */
+      .emoji {
+        font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+        font-variant-emoji: emoji;
+      }
+    </style>
   </head>
   <body>
     <div id="app"></div>

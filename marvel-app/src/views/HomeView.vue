@@ -1,24 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-
-const featuredCharacters = ref([
-  { name: 'Spider-Man', emoji: '🕷️' },
-  { name: 'Iron Man', emoji: '🤖' },
-  { name: 'Captain America', emoji: '🛡️' },
-  { name: 'Thor', emoji: '⚡' },
-  { name: 'Hulk', emoji: '💚' },
-  { name: 'Black Widow', emoji: '🕸️' }
-])
-
-const stats = ref([
-  { value: '1,500+', label: 'Characters', icon: '🦸‍♂️' },
-  { value: '40,000+', label: 'Comics', icon: '📚' },
-  { value: '300+', label: 'Series', icon: '📺' },
-  { value: '80+', label: 'Years', icon: '⏰' }
-])
 
 const handleExploreClick = () => {
   router.push('/characters')
@@ -29,43 +12,49 @@ const handleExploreClick = () => {
   <div class="home-view">
     <!-- Hero Section -->
     <section class="hero-gradient relative overflow-hidden">
-      <!-- Animated Background Elements -->
+      <!-- Static Background Elements -->
       <div class="absolute inset-0 opacity-20">
-        <div class="absolute top-10 left-10 w-32 h-32 bg-white rounded-full animate-pulse"></div>
-        <div class="absolute top-40 right-20 w-20 h-20 bg-red-200 rounded-full animate-bounce" style="animation-delay: 1s;"></div>
-        <div class="absolute bottom-20 left-1/4 w-16 h-16 bg-white rounded-full animate-pulse" style="animation-delay: 2s;"></div>
+        <div class="absolute top-10 left-10 w-32 h-32 bg-white rounded-full"></div>
+        <div class="absolute top-40 right-20 w-20 h-20 bg-red-200 rounded-full"></div>
+        <div class="absolute bottom-20 left-1/4 w-16 h-16 bg-white rounded-full"></div>
       </div>
       
-      <div class="container relative z-10 py-20 lg:py-32">
-        <div class="text-center text-white">
-          <div class="max-w-4xl mx-auto">
-            <!-- Animated Title -->
-            <div class="mb-8 smooth-entrance">
-              <h1 class="text-5xl lg:text-7xl font-black mb-6 leading-tight">
-                🚀 Explore the
-                <span class="block bg-gradient-to-r from-red-200 to-yellow-200 bg-clip-text text-transparent">
-                  Marvel Universe
-                </span>
-              </h1>
-              <div class="flex justify-center items-center gap-4 mb-6">
-                <div v-for="char in featuredCharacters.slice(0, 6)" :key="char.name" 
-                     class="text-4xl animate-bounce" 
-                     :style="{ animationDelay: Math.random() * 2 + 's' }">
-                  {{ char.emoji }}
-                </div>
+      <div class="container relative z-10">
+        <!-- Fixed height hero container to prevent shifts -->
+        <div class="h-screen flex items-center justify-center text-center text-white">
+          <div class="max-w-4xl mx-auto w-full">
+            <!-- Fixed Title Container -->
+            <div class="mb-8">
+              <div class="h-40 lg:h-48 flex flex-col justify-center mb-6">
+                <h1 class="text-5xl lg:text-7xl font-black leading-none">
+                  🚀 Explore the
+                  <span class="block bg-gradient-to-r from-red-200 to-yellow-200 bg-clip-text text-transparent">
+                    Marvel Universe
+                  </span>
+                </h1>
+              </div>
+              <div class="h-16 flex justify-center items-center gap-4 mb-6">
+                <span class="text-4xl w-12 h-12 flex items-center justify-center">🕷️</span>
+                <span class="text-4xl w-12 h-12 flex items-center justify-center">🤖</span>
+                <span class="text-4xl w-12 h-12 flex items-center justify-center">🛡️</span>
+                <span class="text-4xl w-12 h-12 flex items-center justify-center">⚡</span>
+                <span class="text-4xl w-12 h-12 flex items-center justify-center">💚</span>
+                <span class="text-4xl w-12 h-12 flex items-center justify-center">🕸️</span>
               </div>
             </div>
 
-            <!-- Enhanced Description -->
-            <p class="text-xl lg:text-2xl mb-12 text-red-100 font-light leading-relaxed max-w-3xl mx-auto smooth-entrance-delay-1">
-              Discover iconic heroes, legendary villains, and epic stories from 
-              the Marvel multiverse. Your gateway to unlimited adventure awaits!
-            </p>
+            <!-- Fixed Description Container -->
+            <div class="h-28 lg:h-32 flex items-center justify-center mb-12">
+              <p class="text-xl lg:text-2xl text-red-100 font-light leading-relaxed max-w-3xl">
+                Discover iconic heroes, legendary villains, and epic stories from 
+                the Marvel multiverse. Your gateway to unlimited adventure awaits!
+              </p>
+            </div>
 
-            <!-- Enhanced CTAs -->
-            <div class="flex flex-col sm:flex-row gap-6 justify-center items-center smooth-entrance-delay-2">
+            <!-- Fixed CTA Container -->
+            <div class="h-20 flex flex-col sm:flex-row gap-6 justify-center items-center">
               <button @click="handleExploreClick" 
-                      class="group btn-primary text-lg px-10 py-4 transform hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl">
+                      class="group btn-primary text-lg px-10 py-4 transform hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl h-14">
                 <span class="flex items-center gap-3">
                   Start Exploring
                   <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -74,7 +63,7 @@ const handleExploreClick = () => {
                 </span>
               </button>
               <a href="#features" 
-                 class="group btn-secondary bg-white/20 text-white hover:bg-white/30 text-lg px-10 py-4 backdrop-blur-sm border border-white/30 transform hover:scale-105 transition-all duration-300">
+                 class="group btn-secondary bg-white/20 text-white hover:bg-white/30 text-lg px-10 py-4 backdrop-blur-sm border border-white/30 transform hover:scale-105 transition-all duration-300 h-14 flex items-center">
                 <span class="flex items-center gap-3">
                   Learn More
                   <svg class="w-5 h-5 group-hover:translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -92,12 +81,29 @@ const handleExploreClick = () => {
     <section class="py-16 bg-gradient-to-r from-gray-50 to-white">
       <div class="container">
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-8">
-          <div v-for="(stat, index) in stats" :key="stat.label" 
-               class="text-center transform hover:scale-105 transition-all duration-300 smooth-entrance"
-               :style="{ animationDelay: (index * 100) + 'ms' }">
-            <div class="text-6xl mb-2">{{ stat.icon }}</div>
-            <div class="text-3xl lg:text-4xl font-black text-red-600 mb-2">{{ stat.value }}</div>
-            <div class="text-gray-600 text-lg font-medium">{{ stat.label }}</div>
+          <!-- Fixed stat containers -->
+          <div class="text-center h-36 flex flex-col justify-center">
+            <div class="text-6xl mb-2 h-16 flex items-center justify-center">🦸‍♂️</div>
+            <div class="text-3xl lg:text-4xl font-black text-red-600 mb-2 h-10 flex items-center justify-center">1,500+</div>
+            <div class="text-gray-600 text-lg font-medium h-7 flex items-center justify-center">Characters</div>
+          </div>
+          
+          <div class="text-center h-36 flex flex-col justify-center">
+            <div class="text-6xl mb-2 h-16 flex items-center justify-center">📚</div>
+            <div class="text-3xl lg:text-4xl font-black text-red-600 mb-2 h-10 flex items-center justify-center">40,000+</div>
+            <div class="text-gray-600 text-lg font-medium h-7 flex items-center justify-center">Comics</div>
+          </div>
+          
+          <div class="text-center h-36 flex flex-col justify-center">
+            <div class="text-6xl mb-2 h-16 flex items-center justify-center">📺</div>
+            <div class="text-3xl lg:text-4xl font-black text-red-600 mb-2 h-10 flex items-center justify-center">300+</div>
+            <div class="text-gray-600 text-lg font-medium h-7 flex items-center justify-center">Series</div>
+          </div>
+          
+          <div class="text-center h-36 flex flex-col justify-center">
+            <div class="text-6xl mb-2 h-16 flex items-center justify-center">⏰</div>
+            <div class="text-3xl lg:text-4xl font-black text-red-600 mb-2 h-10 flex items-center justify-center">80+</div>
+            <div class="text-gray-600 text-lg font-medium h-7 flex items-center justify-center">Years</div>
           </div>
         </div>
       </div>
@@ -196,15 +202,64 @@ const handleExploreClick = () => {
 
         <!-- Character Grid -->
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-16">
-          <div v-for="(character, index) in featuredCharacters" :key="character.name"
-               class="group text-center transform hover:scale-110 transition-all duration-300 cursor-pointer smooth-entrance"
-               :style="{ animationDelay: (index * 100) + 'ms' }"
+          <!-- Fixed character containers -->
+          <div class="group text-center transform hover:scale-110 transition-all duration-300 cursor-pointer h-28"
                @click="handleExploreClick">
             <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-red-500 to-red-700 rounded-full flex items-center justify-center text-4xl group-hover:shadow-2xl transition-all duration-300">
-              {{ character.emoji }}
+              🕷️
             </div>
-            <h3 class="text-white font-bold group-hover:text-red-300 transition-colors">
-              {{ character.name }}
+            <h3 class="text-white font-bold group-hover:text-red-300 transition-colors h-6 flex items-center justify-center">
+              Spider-Man
+            </h3>
+          </div>
+          
+          <div class="group text-center transform hover:scale-110 transition-all duration-300 cursor-pointer h-28"
+               @click="handleExploreClick">
+            <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-red-500 to-red-700 rounded-full flex items-center justify-center text-4xl group-hover:shadow-2xl transition-all duration-300">
+              🤖
+            </div>
+            <h3 class="text-white font-bold group-hover:text-red-300 transition-colors h-6 flex items-center justify-center">
+              Iron Man
+            </h3>
+          </div>
+          
+          <div class="group text-center transform hover:scale-110 transition-all duration-300 cursor-pointer h-28"
+               @click="handleExploreClick">
+            <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-red-500 to-red-700 rounded-full flex items-center justify-center text-4xl group-hover:shadow-2xl transition-all duration-300">
+              🛡️
+            </div>
+            <h3 class="text-white font-bold group-hover:text-red-300 transition-colors h-6 flex items-center justify-center">
+              Captain America
+            </h3>
+          </div>
+          
+          <div class="group text-center transform hover:scale-110 transition-all duration-300 cursor-pointer h-28"
+               @click="handleExploreClick">
+            <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-red-500 to-red-700 rounded-full flex items-center justify-center text-4xl group-hover:shadow-2xl transition-all duration-300">
+              ⚡
+            </div>
+            <h3 class="text-white font-bold group-hover:text-red-300 transition-colors h-6 flex items-center justify-center">
+              Thor
+            </h3>
+          </div>
+          
+          <div class="group text-center transform hover:scale-110 transition-all duration-300 cursor-pointer h-28"
+               @click="handleExploreClick">
+            <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-red-500 to-red-700 rounded-full flex items-center justify-center text-4xl group-hover:shadow-2xl transition-all duration-300">
+              💚
+            </div>
+            <h3 class="text-white font-bold group-hover:text-red-300 transition-colors h-6 flex items-center justify-center">
+              Hulk
+            </h3>
+          </div>
+          
+          <div class="group text-center transform hover:scale-110 transition-all duration-300 cursor-pointer h-28"
+               @click="handleExploreClick">
+            <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-red-500 to-red-700 rounded-full flex items-center justify-center text-4xl group-hover:shadow-2xl transition-all duration-300">
+              🕸️
+            </div>
+            <h3 class="text-white font-bold group-hover:text-red-300 transition-colors h-6 flex items-center justify-center">
+              Black Widow
             </h3>
           </div>
         </div>
@@ -302,10 +357,33 @@ const handleExploreClick = () => {
   opacity: 1;
 }
 
-/* Ensure no layout shifts */
+/* Prevent layout shifts */
 .home-view {
   opacity: 1;
   visibility: visible;
+}
+
+/* Font loading optimization - prevent font swap layout shifts */
+h1, h2, h3, h4, h5, h6, p, button, a {
+  font-display: swap;
+  text-rendering: optimizeSpeed;
+}
+
+/* Ensure consistent line heights to prevent jumps */
+h1 {
+  line-height: 1.1;
+}
+
+p {
+  line-height: 1.6;
+}
+
+/* Prevent emoji size variations */
+.text-4xl, .text-6xl {
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Smooth scroll behavior */
