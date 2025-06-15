@@ -17,23 +17,28 @@ export default defineConfig({
   },
   build: {
     // Optimization for production builds
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          // Split vendor packages for better caching
-          'vue-vendor': ['vue', 'vue-router', 'pinia'],
-          'ui-vendor': ['tailwindcss'],
-          'utils': ['axios', 'crypto-js']
-        }
-      }
-    },
-    // Enable gzip compression
     minify: 'terser',
     terserOptions: {
       compress: {
         // Remove console.* in production
         drop_console: true,
         drop_debugger: true,
+      }
+    },
+    rollupOptions: {
+      output: {
+        manualChunks: (id) => {
+          // Split vendor packages for better caching
+          if (id.includes('node_modules')) {
+            if (id.includes('vue') || id.includes('pinia')) {
+              return 'vue-vendor'
+            }
+            if (id.includes('axios') || id.includes('crypto-js')) {
+              return 'utils'
+            }
+            return 'vendor'
+          }
+        }
       }
     }
   },
