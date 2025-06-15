@@ -1,110 +1,238 @@
 <template>
-  <div class="favorites-view">
-    <div class="container py-12 max-w-2xl">
-      <!-- Header -->
-      <header class="text-center mb-12">
-        <h1 class="text-4xl lg:text-5xl font-black text-gray-900 mb-4">
-          ⭐ Your Favorite Heroes
-        </h1>
-        <p class="text-xl text-gray-600">
-          Your personal collection of Marvel's finest characters
-        </p>
-      </header>
-
-      <!-- Favorites Count -->
-      <div v-if="hasFavorites" class="card-modern p-6 mb-8 text-center">
-        <div class="flex items-center justify-center space-x-4">
-          <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
-            <svg class="w-6 h-6 text-yellow-600" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-            </svg>
+  <div class="favorites-view bg-gradient-to-br from-yellow-50 via-orange-50 to-red-50 min-h-screen">
+    <!-- Enhanced Hero Section -->
+    <section class="bg-gradient-to-r from-yellow-500 via-orange-500 to-red-600 text-white py-16 lg:py-20">
+      <div class="container">
+        <div class="max-w-4xl mx-auto text-center">
+          <h1 class="text-5xl lg:text-7xl font-black mb-6 leading-tight">
+            ⭐ Your Favorite
+            <span class="block bg-gradient-to-r from-yellow-200 to-yellow-400 bg-clip-text text-transparent">
+              Marvel Heroes
+            </span>
+          </h1>
+          <p class="text-xl lg:text-2xl text-yellow-100 font-light leading-relaxed mb-8 max-w-2xl mx-auto">
+            Your personal collection of Marvel's finest characters. 
+            Every hero that captured your heart lives here!
+          </p>
+          
+          <!-- Quick Stats in Hero -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-12">
+            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-all">
+              <div class="text-4xl mb-3">⭐</div>
+              <div class="text-3xl font-bold">{{ favoritesCount }}</div>
+              <div class="text-yellow-200 text-sm">Favorite{{ favoritesCount === 1 ? '' : 's' }}</div>
+            </div>
+            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-all">
+              <div class="text-4xl mb-3">🦸‍♂️</div>
+              <div class="text-3xl font-bold">{{ hasFavorites ? '100%' : '0%' }}</div>
+              <div class="text-yellow-200 text-sm">Awesome</div>
+            </div>
+            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-all">
+              <div class="text-4xl mb-3">💫</div>
+              <div class="text-3xl font-bold">{{ hasFavorites ? 'Epic' : 'Ready' }}</div>
+              <div class="text-yellow-200 text-sm">Collection</div>
+            </div>
           </div>
-          <div>
-            <div class="text-2xl font-bold text-gray-900">{{ favoritesCount }}</div>
-            <div class="text-gray-600">Favorite{{ favoritesCount === 1 ? '' : 's' }}</div>
-          </div>
-          <button
-            @click="handleClearAll"
-            class="btn-secondary text-sm px-4 py-2"
-            aria-label="Clear all favorites"
-          >
-            Clear All
-          </button>
         </div>
       </div>
+    </section>
 
-      <!-- Favorites List -->
-      <section v-if="hasFavorites" class="space-y-8" aria-label="Favorite characters list">
-        <CharacterCard
-          v-for="character in favoriteCharacters"
-          :key="character.id"
-          :character="character"
-          @click="handleCharacterClick(character.id)"
-        />
+    <div class="container py-12">
+      <!-- Enhanced Favorites Management Section -->
+      <section v-if="hasFavorites" class="relative -mt-20 mb-12">
+        <div class="card-modern p-8 shadow-2xl border-0 bg-white">
+          <div class="flex flex-col lg:flex-row items-center justify-between gap-6">
+            <!-- Collection Info -->
+            <div class="flex items-center gap-6">
+              <div class="w-20 h-20 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg">
+                <span class="text-3xl">🏆</span>
+              </div>
+              <div>
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">
+                  Amazing Collection!
+                </h2>
+                <p class="text-gray-600 text-lg">
+                  You've starred <span class="font-semibold text-orange-600">{{ favoritesCount }}</span> incredible Marvel character{{ favoritesCount === 1 ? '' : 's' }}
+                </p>
+              </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex flex-col sm:flex-row gap-4">
+              <router-link 
+                to="/characters" 
+                class="btn-secondary flex items-center gap-2 px-6 py-3"
+              >
+                <span class="text-xl">🔍</span>
+                Find More Heroes
+              </router-link>
+              <button
+                @click="handleClearAll"
+                class="px-6 py-3 bg-red-500 text-white rounded-xl font-semibold hover:bg-red-600 transition-all transform hover:scale-105 flex items-center gap-2 shadow-md"
+                aria-label="Clear all favorites"
+              >
+                <span class="text-xl">🗑️</span>
+                Clear Collection
+              </button>
+            </div>
+          </div>
+
+          <!-- Collection Progress -->
+          <div class="mt-8 p-4 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl border border-yellow-200">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-sm font-semibold text-gray-700">Collection Progress</span>
+              <span class="text-sm text-gray-600">{{ Math.min(favoritesCount, 50) }}/50 heroes</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-3">
+              <div 
+                class="bg-gradient-to-r from-yellow-400 to-orange-500 h-3 rounded-full transition-all duration-500"
+                :style="{ width: `${Math.min((favoritesCount / 50) * 100, 100)}%` }"
+              ></div>
+            </div>
+            <p class="text-xs text-gray-500 mt-2">
+              {{ favoritesCount >= 50 ? '🎉 Master Collector!' : `${50 - favoritesCount} more to become a Master Collector!` }}
+            </p>
+          </div>
+        </div>
       </section>
 
-      <!-- Empty State -->
-      <div v-else class="text-center py-20">
-        <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-          <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
-          </svg>
+      <!-- Enhanced Favorites Grid -->
+      <section v-if="hasFavorites" class="grid gap-8 lg:gap-12" aria-label="Favorite characters list">
+        <div 
+          v-for="(character, index) in favoriteCharacters" 
+          :key="character.id"
+          class="transform hover:scale-[1.02] transition-all duration-300"
+          :style="{ animationDelay: `${index * 100}ms` }"
+        >
+          <CharacterCard
+            :character="character"
+            @click="handleCharacterClick(character.id)"
+            class="animate-fade-in-up"
+          />
         </div>
-        <h3 class="text-2xl font-bold text-gray-900 mb-4">No favorites yet</h3>
-        <p class="text-gray-600 mb-8 max-w-md mx-auto">
-          Start building your collection by starring your favorite Marvel characters. 
-          Click the star icon on any character card or profile page.
+      </section>
+
+      <!-- Enhanced Empty State -->
+      <div v-else class="text-center py-20">
+        <div class="relative mb-12">
+          <!-- Floating Stars Animation -->
+          <div class="absolute -top-4 -left-4 text-4xl animate-bounce" style="animation-delay: 0s;">⭐</div>
+          <div class="absolute -top-8 right-8 text-3xl animate-bounce" style="animation-delay: 0.5s;">✨</div>
+          <div class="absolute bottom-0 left-12 text-2xl animate-bounce" style="animation-delay: 1s;">💫</div>
+          
+          <div class="w-32 h-32 bg-gradient-to-br from-yellow-100 via-orange-100 to-red-100 rounded-3xl flex items-center justify-center mx-auto shadow-lg">
+            <span class="text-6xl">🌟</span>
+          </div>
+        </div>
+
+        <h3 class="text-4xl font-bold text-gray-900 mb-6">Start Your Hero Collection!</h3>
+        <p class="text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed">
+          Your favorites collection is waiting to be filled with amazing Marvel characters. 
+          Discover heroes, villains, and legends that inspire you!
         </p>
-        <router-link to="/characters" class="btn-primary inline-block">
-          Explore Characters
-        </router-link>
+
+        <!-- Action Cards -->
+        <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-12">
+          <div class="card-modern p-8 text-center hover:shadow-xl transition-all duration-300">
+            <div class="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <span class="text-3xl">🔍</span>
+            </div>
+            <h4 class="text-xl font-bold text-gray-900 mb-4">Explore Characters</h4>
+            <p class="text-gray-600 mb-6">
+              Browse through 1,500+ Marvel characters and discover your new favorites
+            </p>
+            <router-link to="/characters" class="btn-primary">
+              <span class="flex items-center gap-2">
+                🚀 Start Exploring
+              </span>
+            </router-link>
+          </div>
+
+          <div class="card-modern p-8 text-center hover:shadow-xl transition-all duration-300">
+            <div class="w-16 h-16 bg-gradient-to-br from-purple-100 to-purple-200 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <span class="text-3xl">💡</span>
+            </div>
+            <h4 class="text-xl font-bold text-gray-900 mb-4">How to Add Favorites</h4>
+            <p class="text-gray-600 mb-6">
+              Click the star icon ⭐ on any character card or profile page to add them here
+            </p>
+            <button class="btn-secondary" disabled>
+              <span class="flex items-center gap-2">
+                ⭐ Star Characters
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Popular Characters Suggestion -->
+        <div class="bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl p-8 text-white">
+          <h4 class="text-2xl font-bold mb-6">🔥 Popular Heroes to Start With</h4>
+          <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+            <div v-for="hero in popularHeroes" :key="hero.name" 
+                 class="text-center group cursor-pointer"
+                 @click="router.push('/characters')">
+              <div class="w-16 h-16 mx-auto mb-3 bg-gradient-to-br from-red-500 to-red-700 rounded-full flex items-center justify-center text-3xl group-hover:scale-110 transition-transform shadow-lg">
+                {{ hero.emoji }}
+              </div>
+              <div class="text-sm font-medium group-hover:text-yellow-300 transition-colors">
+                {{ hero.name }}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Clear All Confirmation Modal -->
+    <!-- Enhanced Clear All Confirmation Modal -->
     <div v-if="showClearModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-      <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center">
         <!-- Background overlay -->
         <div 
-          class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" 
+          class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity backdrop-blur-sm" 
           aria-hidden="true"
           @click="showClearModal = false"
         ></div>
 
         <!-- Modal panel -->
-        <div class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
-          <div class="sm:flex sm:items-start">
-            <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-              <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
-              </svg>
-            </div>
-            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-              <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                Clear All Favorites
-              </h3>
-              <div class="mt-2">
-                <p class="text-sm text-gray-500">
-                  Are you sure you want to remove all {{ favoritesCount }} favorite{{ favoritesCount === 1 ? '' : 's' }}? This action cannot be undone and you'll lose your entire collection.
-                </p>
-              </div>
-            </div>
+        <div class="relative inline-block align-middle bg-white rounded-2xl px-8 pt-8 pb-6 text-left overflow-hidden shadow-2xl transform transition-all max-w-lg w-full">
+          <!-- Warning Icon -->
+          <div class="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-red-100 mb-6">
+            <span class="text-4xl">⚠️</span>
           </div>
-          <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+
+          <!-- Content -->
+          <div class="text-center">
+            <h3 class="text-2xl font-bold text-gray-900 mb-4" id="modal-title">
+              Clear Your Entire Collection?
+            </h3>
+            <p class="text-lg text-gray-600 mb-2">
+              You're about to remove all <span class="font-bold text-red-600">{{ favoritesCount }}</span> favorite character{{ favoritesCount === 1 ? '' : 's' }} from your collection.
+            </p>
+            <p class="text-gray-500 mb-8">
+              This action cannot be undone and you'll lose your entire collection permanently.
+            </p>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
             <button 
               type="button" 
-              class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm transition-colors"
+              class="px-8 py-3 bg-red-600 text-white rounded-xl font-semibold hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-200 transition-all transform hover:scale-105 shadow-lg"
               @click="confirmClearAll"
             >
-              Clear All
+              <span class="flex items-center gap-2">
+                🗑️ Yes, Clear All
+              </span>
             </button>
             <button 
               type="button" 
-              class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm transition-colors"
+              class="px-8 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 focus:outline-none focus:ring-4 focus:ring-gray-200 transition-all"
               @click="showClearModal = false"
               ref="cancelButton"
             >
-              Cancel
+              <span class="flex items-center gap-2">
+                ❌ Cancel
+              </span>
             </button>
           </div>
         </div>
@@ -127,6 +255,16 @@ const { favoriteCharacters, favoritesCount, hasFavorites } = storeToRefs(favorit
 
 const showClearModal = ref(false)
 
+// Popular heroes for empty state suggestions
+const popularHeroes = ref([
+  { name: 'Spider-Man', emoji: '🕷️' },
+  { name: 'Iron Man', emoji: '🤖' },
+  { name: 'Captain America', emoji: '🛡️' },
+  { name: 'Thor', emoji: '⚡' },
+  { name: 'Hulk', emoji: '💚' },
+  { name: 'Black Widow', emoji: '🕸️' }
+])
+
 const handleCharacterClick = (id: number) => {
   router.push({ name: 'character-detail', params: { id: id.toString() } })
 }
@@ -144,5 +282,57 @@ const confirmClearAll = () => {
 <style scoped>
 .container {
   max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* Enhanced animations */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out forwards;
+}
+
+/* Custom gradient text support */
+.bg-clip-text {
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* Backdrop blur support */
+.backdrop-blur-sm {
+  backdrop-filter: blur(4px);
+}
+
+/* Smooth transitions */
+* {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
 }
 </style> 
